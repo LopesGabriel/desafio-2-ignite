@@ -14,6 +14,9 @@ class CreateUserUseCase {
     if (!name) throw new Error("Name must be valid!");
     if (!email) throw new Error("E-mail must be valid!");
 
+    const existingUser = this.usersRepository.findByEmail(email);
+    if (existingUser) throw new Error("User e-mail already in use");
+
     return this.usersRepository.create({ name, email });
   }
 }
