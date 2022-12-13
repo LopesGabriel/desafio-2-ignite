@@ -7,10 +7,14 @@ interface IRequest {
 }
 
 class CreateUserUseCase {
-  constructor(private usersRepository: IUsersRepository) {}
+  // eslint-disable-next-line prettier/prettier
+  constructor(private usersRepository: IUsersRepository) { }
 
   execute({ email, name }: IRequest): User {
-    // Complete aqui
+    if (!name) throw new Error("Name must be valid!");
+    if (!email) throw new Error("E-mail must be valid!");
+
+    return this.usersRepository.create({ name, email });
   }
 }
 
