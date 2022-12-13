@@ -9,11 +9,24 @@ class ListAllUsersController {
   handle(request: Request, response: Response): Response {
     const { user_id } = request.headers;
 
-    const users = this.listAllUsersUseCase.execute({
-      user_id: user_id as string,
-    });
+    try {
+      const users = this.listAllUsersUseCase.execute({
+        user_id: user_id as string,
+      });
 
-    return response.json(users);
+      return response.json(users);
+    } catch (err) {
+      let message = "Failed to process the request";
+
+      if (
+        err.message === "User is not admin" ||
+        err.message === "User not found"
+      ) {
+        message = err.message;
+      }
+
+      return response.status(400).json({ message, error: true });
+    }
   }
 }
 
